@@ -37,6 +37,24 @@ class TeamMember {
         return capacities;
     }
 
+    public String calculateTeamCapacity(Map<String, double[]> individualCapacities) {
+        double minTeamCapacity = 0;
+        double maxTeamCapacity = 0;
+
+        double[] minCapacities = individualCapacities.get("minimum");
+        for (double capacity : minCapacities) {
+            minTeamCapacity += capacity;
+        }
+
+        double[] maxCapacities = individualCapacities.get("maximum");
+        for (double capacity : maxCapacities) {
+            maxTeamCapacity += capacity;
+        }
+
+        String teamCapacityRange = minTeamCapacity + " - " + maxTeamCapacity;
+        return teamCapacityRange;
+    }
+
     public static void printIndividualCapacities(List<TeamMember> members, Map<String, double[]> capacityMap) {
         if (members == null || members.isEmpty()) {
             return;
@@ -57,8 +75,10 @@ class TeamMember {
             i += 1;
         }
     }
+}
 
 public class Main {
+
     public static double calculateAverageVelocity(List<String> sprintPoints) {
         if (sprintPoints == null || sprintPoints.isEmpty()) {
             return 0.0;
@@ -111,6 +131,12 @@ public class Main {
             TeamMember member = new TeamMember(id, minHours, maxHours, sprintCeremonyTime, daysOff);
             teamMemberDetails.add(member);
         }
+
+        TeamMember memberObj = new TeamMember();
+        Map<String, double[]> memberCapacities = memberObj.calculateIndividualCapacity(teamMemberDetails, sprintDays);
+        String teamCapacity = memberObj.calculateTeamCapacity(memberCapacities);
+
+        System.out.println("\nRange of Total Team Effort-Hours Available: " + teamCapacity);
 
         sc.close();
     }
