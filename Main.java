@@ -7,6 +7,9 @@ class TeamMember {
     double minDailyHours;
     double maxDailyHours;
 
+    public TeamMember() {
+    }
+
     public TeamMember(int id, double minDailyHours, double maxDailyHours, double ceremonyHours, double daysOff) {
         this.memberId = id;
         this.minDailyHours = minDailyHours;
@@ -14,7 +17,46 @@ class TeamMember {
         this.ceremonyHours = ceremonyHours;
         this.daysOff = daysOff;
     }
-}
+
+    public Map<String, double[]> calculateIndividualCapacity(List<TeamMember> members, int sprintLength) {
+        double[] minCapacities = new double[members.size()];
+        double[] maxCapacities = new double[members.size()];
+        for (int i = 0; i < members.size(); i++) {
+            double availableDays = sprintLength - members.get(i).daysOff;
+            double minAvailableHours = availableDays * (members.get(i).minDailyHours - members.get(i).ceremonyHours);
+            double maxAvailableHours = availableDays * (members.get(i).maxDailyHours - members.get(i).ceremonyHours);
+            minCapacities[i] = minAvailableHours;
+            maxCapacities[i] = maxAvailableHours;
+        }
+        System.out.println("Sprint Length: " + sprintLength);
+        System.out.println("Team Size: " + members.size());
+        Map<String, double[]> capacities = new HashMap<>();
+        capacities.put("minimum", minCapacities);
+        capacities.put("maximum", maxCapacities);
+        printIndividualCapacities(members, capacities);
+        return capacities;
+    }
+
+    public static void printIndividualCapacities(List<TeamMember> members, Map<String, double[]> capacityMap) {
+        if (members == null || members.isEmpty()) {
+            return;
+        }
+        System.out.printf("| %-20s | %-20s | %-20s | %-20s | %-30s |\n", "Member ID", "Daily Hours", "Ceremony Hours",
+                "Days Off", "Available Effort-Hours range");
+        System.out.println(
+                "|----------------------|----------------------|----------------------|----------------------|--------------------------------|");
+        int i = 0;
+        double[] minCapacities = capacityMap.get("minimum");
+        double[] maxCapacities = capacityMap.get("maximum");
+
+        for (TeamMember entry : members) {
+            String effortHoursRange = minCapacities[i] + " - " + maxCapacities[i];
+            String dailyHourRange = entry.minDailyHours + " - " + entry.maxDailyHours;
+            System.out.printf("| %-20s | %-20s | %-20s | %-20s | %-30s |\n", entry.memberId, dailyHourRange,
+                    entry.ceremonyHours, entry.daysOff, effortHoursRange);
+            i += 1;
+        }
+    }
 
 public class Main {
     public static double calculateAverageVelocity(List<String> sprintPoints) {
