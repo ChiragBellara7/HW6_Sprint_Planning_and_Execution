@@ -99,7 +99,7 @@ public class Main {
         System.out.print("Enter the number of previous sprints: ");
         int sprintNum = sc.nextInt();
         System.out
-                .print("\nEnter the story points of the previous " + sprintNum + " sprints (comma separated values): ");
+                .print("Enter the story points of the previous " + sprintNum + " sprints (comma separated values): ");
         String storyPointsString = sc.next();
         List<String> sprintPoints = new ArrayList<>(Arrays.asList(storyPointsString.split(",")));
         double averageVelocity = calculateAverageVelocity(sprintPoints);
@@ -107,7 +107,7 @@ public class Main {
 
         // Feature B
         sc.nextLine();
-        System.err.print("Enter the length of the sprint: ");
+        System.err.print("\n\nEnter the length of the sprint: ");
         int sprintDays = sc.nextInt();
         System.out.print("Enter the number of team members: ");
         int memberNum = sc.nextInt();
